@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أثر الكلمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+.ico{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent);font-size:28px;flex-shrink:0}
+.ico.lg{width:76px;height:76px;border-radius:22px;font-size:42px}
+.ico.sm{width:30px;height:30px;border-radius:9px;font-size:18px;vertical-align:middle}
+.ico.gold{background:#f7efd9;color:var(--gold)}
+:root{
+  --paper:#faf6ee; --card:#ffffff; --ink:#1f2a44; --soft:#6b7287; --line:#e8e1d3;
+  --accent:#b5653f; --accent-soft:#f6e6dc; --ok:#2f7d5b; --ok-soft:#e1f1e8; --bad:#b33a3a; --bad-soft:#f8e3e3;
+  --gold:#c9a24a; --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;line-height:1.7}
+button{font-family:inherit;cursor:pointer;border:none}
+input,textarea{font-family:inherit}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;border-radius:14px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:'Amiri',serif;font-size:26px;font-weight:700}
+.brand h1{font-family:'Amiri',serif;font-size:26px;line-height:1}
+.brand small{color:var(--soft);font-size:13px}
+.pts{background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:999px;font-weight:700;white-space:nowrap}
+.pts b{color:var(--accent)}
+.screen{display:none;animation:fade .35s ease}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.hero{text-align:center;padding:40px 22px}
+.hero .big{font-family:'Amiri',serif;font-size:clamp(34px,9vw,56px);line-height:1.6;margin-bottom:8px;overflow-wrap:break-word}
+.hero p{color:var(--soft);max-width:520px;margin:0 auto 24px}
+.field{width:100%;max-width:340px;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;font-size:17px;background:var(--paper);text-align:center;outline:none}
+.field:focus{border-color:var(--accent)}
+.btn{background:var(--ink);color:#fff;padding:13px 26px;border-radius:14px;font-size:16px;font-weight:700;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.alt{background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.45;transform:none;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.greet{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.greet h2{font-family:'Amiri',serif;font-size:30px}
+.greet p{color:var(--soft)}
+.progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 4px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:99px;transition:width .6s}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+@media(max-width:620px){.grid{grid-template-columns:1fr}.hero{padding:30px 16px}}
+.word{font-size:clamp(36px,10vw,52px)!important;line-height:1.6!important}
+.sentence,.tok{font-size:clamp(22px,6vw,30px)}
+html,body{overflow-x:hidden}
+.tile{text-align:right;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:.25s;position:relative;color:var(--ink)}
+.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
+.tile .ic{font-size:30px;margin-bottom:6px}
+.tile h3{font-size:19px;margin-bottom:2px}
+.tile p{color:var(--soft);font-size:14px}
+.tile .mini{margin-top:12px;font-size:13px;color:var(--soft);display:flex;justify-content:space-between}
+.back{background:none;color:var(--soft);font-weight:700;margin-bottom:14px;font-size:15px}
+.back:hover{color:var(--ink)}
+.sec-title{font-family:'Amiri',serif;font-size:30px;margin-bottom:4px}
+.sec-sub{color:var(--soft);margin-bottom:18px}
+.qnum{font-size:13px;color:var(--soft);font-weight:700}
+.qtype{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700;margin:8px 0}
+.word{font-family:'Amiri',serif;font-size:52px;text-align:center;margin:10px 0 20px;line-height:1.3}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.opts{grid-template-columns:1fr}}
+.opt{background:var(--paper);border:1.5px solid var(--line);padding:14px;border-radius:14px;font-size:17px;font-weight:500;color:var(--ink);transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);font-weight:700}
+.opt.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.feedback{margin-top:16px;padding:12px 16px;border-radius:12px;font-weight:700;display:none}
+.feedback.ok{display:block;background:var(--ok-soft);color:var(--ok)}
+.feedback.bad{display:block;background:var(--bad-soft);color:var(--bad)}
+.sentence{font-family:'Amiri',serif;font-size:30px;text-align:center;margin:18px 0;line-height:2.2}
+.tok{background:none;font-family:'Amiri',serif;font-size:30px;color:var(--ink);padding:0 6px;border-radius:10px;border-bottom:2px dashed var(--line);margin:0 2px;transition:.2s}
+.tok:hover:not(:disabled){background:var(--accent-soft)}
+.tok.found{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.tok.fixed{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.tok.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.hint{text-align:center;color:var(--soft);font-size:14px}
+.done-box{text-align:center;padding:30px}
+.done-box .em{font-size:52px}
+.prompts{display:grid;gap:12px}
+.prompt{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:right;color:var(--ink);transition:.2s;width:100%}
+.prompt:hover{border-color:var(--accent)}
+.prompt .em{font-size:34px;width:54px;text-align:center;flex-shrink:0}
+.prompt h4{font-size:17px}
+.prompt p{color:var(--soft);font-size:14px}
+.prompt .st{margin-inline-start:auto;font-size:13px;font-weight:700;white-space:nowrap}
+.st.d{color:var(--ok)} .st.n{color:var(--accent)}
+textarea.write{width:100%;min-height:150px;padding:14px;border:1.5px solid var(--line);border-radius:14px;font-size:18px;background:var(--paper);resize:vertical;outline:none;line-height:1.9}
+textarea.write:focus{border-color:var(--accent)}
+.count{font-size:13px;color:var(--soft);margin-top:6px}
+.starter{font-family:'Amiri',serif;font-size:22px;background:var(--accent-soft);padding:14px 18px;border-radius:14px;margin-bottom:12px}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.badge{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 12px;text-align:center}
+.badge .ico{filter:grayscale(1);opacity:.35;transition:.3s;margin:0 auto}
+.badge.got .ico{filter:none;opacity:1}
+.badge.got{border-color:var(--gold);box-shadow:0 6px 18px rgba(201,162,74,.18)}
+.badge h4{font-size:15px;margin-top:6px}
+.badge p{font-size:12px;color:var(--soft)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:26px;color:var(--accent)}
+.stat span{font-size:13px;color:var(--soft)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--soft);font-size:13px}
+details summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:14px}
+details .wr{background:var(--paper);border-radius:10px;padding:10px;margin-top:6px;font-size:14px}
+details .wr small{color:var(--soft);display:block}
+.tablewrap{overflow-x:auto}
+.foot{text-align:center;margin-top:30px;color:var(--soft);font-size:13px}
+.foot button{background:none;color:var(--soft);text-decoration:underline;font-size:13px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:14px;font-weight:700;transition:.4s;z-index:20;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">أ</div>
+      <div><h1>أثر الكلمة</h1><small>مبادرة لمقرر اللغة العربية</small></div>
+    </div>
+    <div class="pts" id="ptsBox" style="display:none"><i class="ph-fill ph-star" style="color:var(--gold)"></i> <b id="ptsVal">0</b> نقطة</div>
+  </header>
+
+  <!-- دخول -->
+  <section class="screen on" id="s-login">
+    <div class="card hero">
+      <div class="big">لكل كلمةٍ أثر</div>
+      <p>تحدياتٌ يومية ممتعة تُثري مفرداتك، وتُقوّي كتابتك، وتكشف لك جمال لغتنا العربية.</p>
+      <input class="field" id="nameIn" placeholder="اكتبي اسمك الثلاثي" maxlength="40">
+      <div class="row"><button class="btn" onclick="login()">ابدئي الرحلة</button></div>
+    </div>
+  </section>
+
+  <!-- الرئيسية -->
+  <section class="screen" id="s-home">
+    <div class="greet">
+      <div><h2 id="hello">أهلًا</h2><p>اختاري تحدّيك لهذا اليوم</p></div>
+      <button class="btn ghost" onclick="logout()">تبديل الطالبة</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;font-weight:700"><span>تقدّمك في المبادرة</span><span id="pctTxt">0٪</span></div>
+      <div class="progress"><i id="pctBar" style="width:0"></i></div>
+    </div>
+    <div class="grid">
+      <button class="tile" onclick="go('vocab')"><div class="ico" style="margin-bottom:10px"><i class="ph-duotone ph-diamond"></i></div><h3>كنز المفردات</h3><p>المعنى والمرادف والضد</p><div class="mini"><span id="m-vocab"></span><span>١٠ نقاط للإجابة</span></div></button>
+      <button class="tile" onclick="go('fix')"><div class="ico" style="margin-bottom:10px"><i class="ph-duotone ph-pencil-simple-line"></i></div><h3>صحّحي العبارة</h3><p>اكتشفي الخطأ وصحّحيه</p><div class="mini"><span id="m-fix"></span><span>حتى ١٥ نقطة</span></div></button>
+      <button class="tile" onclick="go('pen')"><div class="ico" style="margin-bottom:10px"><i class="ph-duotone ph-pen-nib"></i></div><h3>تحدي القلم</h3><p>جملة إبداعية أو تكملة قصة</p><div class="mini"><span id="m-pen"></span><span>١٥ نقطة للكتابة</span></div></button>
+      <button class="tile" onclick="go('badges')"><div class="ico gold" style="margin-bottom:10px"><i class="ph-duotone ph-medal"></i></div><h3>وسام اللغوية المبدعة</h3><p>أوسمتك ونقاطك</p><div class="mini"><span id="m-badges"></span><span></span></div></button>
+    </div>
+  </section>
+
+  <!-- كنز المفردات -->
+  <section class="screen" id="s-vocab">
+    <button class="back" onclick="go('home')">→ العودة</button>
+    <h2 class="sec-title"><span class="ico sm"><i class="ph-duotone ph-diamond"></i></span> كنز المفردات</h2>
+    <p class="sec-sub">اختاري الإجابة الصحيحة — لكل سؤال محاولة واحدة.</p>
+    <div class="card" id="vocabBox"></div>
+  </section>
+
+  <!-- صححي العبارة -->
+  <section class="screen" id="s-fix">
+    <button class="back" onclick="go('home')">→ العودة</button>
+    <h2 class="sec-title"><span class="ico sm"><i class="ph-duotone ph-pencil-simple-line"></i></span> صحّحي العبارة</h2>
+    <p class="sec-sub">في كل جملة كلمةٌ واحدة خاطئة، اضغطي عليها ثم اختاري صوابها.</p>
+    <div class="card" id="fixBox"></div>
+  </section>
+
+  <!-- تحدي القلم -->
+  <section class="screen" id="s-pen">
+    <button class="back" onclick="go('home')">→ العودة</button>
+    <h2 class="sec-title"><span class="ico sm"><i class="ph-duotone ph-pen-nib"></i></span> تحدي القلم</h2>
+    <p class="sec-sub">اختاري بطاقة واكتبي بأسلوبك الخاص (ست كلمات على الأقل).</p>
+    <div id="penBox"></div>
+  </section>
+
+  <!-- الأوسمة -->
+  <section class="screen" id="s-badges">
+    <button class="back" onclick="go('home')">→ العودة</button>
+    <h2 class="sec-title"><span class="ico sm gold"><i class="ph-duotone ph-medal"></i></span> وسام اللغوية المبدعة</h2>
+    <p class="sec-sub">أكملي التحديات لتفتحي الأوسمة.</p>
+    <div class="stats" id="statsBox"></div>
+    <div class="badges" id="badgeBox"></div>
+  </section>
+
+  <!-- المعلمة -->
+  <section class="screen" id="s-teacher">
+    <button class="back" onclick="go(cur?'home':'login')">→ العودة</button>
+    <h2 class="sec-title"><span class="ico sm"><i class="ph-duotone ph-chalkboard-teacher"></i></span> لوحة المعلمة</h2>
+    <p class="sec-sub">متابعة المشاركة والنتائج للطالبات المسجّلات على هذا الجهاز.</p>
+    <div class="stats" id="tStats"></div>
+    <div class="card tablewrap" id="tTable"></div>
+    <div class="row"><button class="btn ghost" onclick="exportCSV()">تنزيل النتائج</button><button class="btn ghost" style="color:var(--bad)" onclick="resetAll()">مسح جميع البيانات</button></div>
+  </section>
+
+  <div class="foot"><button onclick="openTeacher()">دخول المعلمة</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ المحتوى — يمكن تحديثه أسبوعيًا ============ */
+const TEACHER_PIN = '2468';
+
+const VOCAB = [
+  {w:'السَّغَب', t:'ما معنى الكلمة؟', o:['الجوع','العطش','التعب','الخوف']},
+  {w:'الهُمام', t:'ما مرادف الكلمة؟', o:['الشجاع عالي الهمّة','الكسول','البخيل','الجبان']},
+  {w:'الوَجَل', t:'ما ضد الكلمة؟', o:['الطمأنينة','الخوف','الحزن','الغضب']},
+  {w:'اليَراع', t:'ما معنى الكلمة؟', o:['القلم','السيف','الكتاب','الحبر']},
+  {w:'الغَيث', t:'ما مرادف الكلمة؟', o:['المطر','الرعد','الريح','السحاب']},
+  {w:'الشُّحّ', t:'ما ضد الكلمة؟', o:['الكرم','البخل','الفقر','الطمع']},
+  {w:'الدُّجى', t:'ما معنى الكلمة؟', o:['الظلام','الفجر','النجوم','الضباب']},
+  {w:'البَهاء', t:'ما مرادف الكلمة؟', o:['الحُسن','القبح','الضعف','الضيق']},
+  {w:'الوَهَن', t:'ما ضد الكلمة؟', o:['القوة','الضعف','المرض','الكسل']},
+  {w:'الأُفول', t:'ما معنى الكلمة؟', o:['الغياب والغروب','الشروق','الارتفاع','اللمعان']}
+]; // الإجابة الصحيحة دائمًا أول خيار (تُخلط تلقائيًا عند العرض)
+
+const FIX = [
+  {s:['ذهبتِ','الطالباتُ','إلى','المكتبه'], e:3, o:['المكتبة','المكتبهُ','المكتبات'], why:'تُكتب التاء المربوطة بنقطتين في آخر الاسم المؤنث.'},
+  {s:['إنَّ','الطالباتِ','مجتهدونَ'], e:2, o:['مجتهداتٌ','مجتهدينَ','مجتهدةٌ'], why:'خبر «إنّ» يطابق اسمها: الطالبات ← مجتهداتٌ.'},
+  {s:['هاذا','كتابٌ','مفيدٌ','جدًّا'], e:0, o:['هذا','هاذى','هاذه'], why:'«هذا» من الكلمات التي تُحذف منها الألف كتابةً.'},
+  {s:['كان','الجوُّ','جميلٌ','اليوم'], e:2, o:['جميلًا','جميلٍ','جميلُ'], why:'خبر «كان» منصوب: كان الجوُّ جميلًا.'},
+  {s:['سئلتِ','المعلمةُ','عن','الدرسِ'], e:0, o:['سألتِ','سإلت','ساءلت'], why:'المقصود فعل السؤال «سأل»، والهمزة متوسطة على ألف لأنها مفتوحة بعد فتح.'},
+  {s:['أنتي','طالبةٌ','مُبدعةٌ'], e:0, o:['أنتِ','أنتى','انتي'], why:'الضمير «أنتِ» يُكتب بكسرة على التاء دون ياء.'},
+  {s:['رأيتُ','مسؤولونَ','في','المدرسةِ'], e:1, o:['مسؤولينَ','مسؤولونُ','مسؤولًا'], why:'«مسؤولين» مفعول به منصوب بالياء لأنه جمع مذكر سالم.'},
+  {s:['لاكن','الوقتَ','كان','قصيرًا'], e:0, o:['لكنَّ','لاكنَّ','لكين'], why:'«لكنّ» تُنطق بالألف وتُكتب بدونها.'}
+];
+
+const PEN = [
+  {em:'plant', title:'كلمة اليوم: الأمل', task:'اكتبي جملة إبداعية عن الأمل.'},
+  {em:'cloud-rain', title:'صورة: المطر', task:'صفي لحظة نزول المطر بجملة تُحسّ بها القارئة.'},
+  {em:'moon-stars', title:'صورة: ليلة في الصحراء', task:'صفي المشهد مستخدمةً تشبيهًا واحدًا على الأقل.'},
+  {em:'package', title:'أكملي القصة', task:'أكملي القصة في ثلاثة أسطر.', start:'فتحت سارة الصندوق القديم في بيت جدّتها، فوجدت…'},
+  {em:'book-open-text', title:'كلمة اليوم: الكتاب', task:'اكتبي جملة تجعلين فيها الكتاب صديقًا يتحدث.'}
+]; // em = اسم الأيقونة من مكتبة phosphoricons.com
+
+const BADGES = [
+  {em:'sparkle', n:'الخطوة الأولى', d:'أول إجابة صحيحة', c:u=>u.points>0},
+  {em:'diamond', n:'صائدة الكنوز', d:'إكمال كنز المفردات', c:u=>Object.keys(u.vocab).length>=VOCAB.length},
+  {em:'magnifying-glass', n:'عين التدقيق', d:'إكمال صحّحي العبارة', c:u=>Object.keys(u.fix).length>=FIX.length},
+  {em:'pen-nib', n:'صاحبة القلم', d:'ثلاث كتابات إبداعية', c:u=>Object.keys(u.pen).length>=3},
+  {em:'target', n:'الدقيقة', d:'جميع المفردات صحيحة', c:u=>Object.keys(u.vocab).length>=VOCAB.length && Object.values(u.vocab).every(Boolean)},
+  {em:'fire', n:'المثابرة', d:'جمع ١٥٠ نقطة', c:u=>u.points>=150},
+  {em:'crown', n:'اللغوية المبدعة', d:'إكمال كل التحديات', c:u=>pct(u)>=100}
+];
+const icon=(n,cls='')=>`<span class="ico ${cls}"><i class="ph-duotone ph-${n}"></i></span>`;
+
+/* ============ التخزين ============ */
+const KEY='athar_alkalima_v1';
+let db={students:{}}, cur=null;
+try{ db=JSON.parse(localStorage.getItem(KEY))||db; }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){} }
+function me(){ return db.students[cur]; }
+
+/* ============ أدوات ============ */
+const $=id=>document.getElementById(id);
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2400); }
+function total(){ return VOCAB.length+FIX.length+PEN.length; }
+function pct(u){ return Math.round((Object.keys(u.vocab).length+Object.keys(u.fix).length+Object.keys(u.pen).length)/total()*100); }
+function addPts(n){ const u=me(); const before=BADGES.filter(b=>b.c(u)).length; u.points+=n; save(); updPts();
+  const after=BADGES.filter(b=>b.c(u)); if(after.length>before) setTimeout(()=>toast('وسام جديد: '+after[after.length-1].n),900); }
+function updPts(){ $('ptsVal').textContent=ar(me()?me().points:0); }
+
+/* ============ التنقل ============ */
+function go(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));
+  $('s-'+s).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'});
+  ({home:renderHome,vocab:renderVocab,fix:renderFix,pen:renderPen,badges:renderBadges,teacher:renderTeacher}[s]||(()=>{}))();
+}
+function login(){
+  const n=$('nameIn').value.trim(); if(n.length<3){toast('اكتبي اسمك من فضلك');return;}
+  if(!db.students[n]) db.students[n]={points:0,vocab:{},fix:{},pen:{},joined:new Date().toISOString()};
+  cur=n; db.current=n; save(); $('ptsBox').style.display=''; updPts(); go('home');
+}
+function logout(){ cur=null; db.current=null; save(); $('ptsBox').style.display='none'; $('nameIn').value=''; go('login'); }
+$('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+
+/* ============ الرئيسية ============ */
+function renderHome(){
+  const u=me(); $('hello').textContent='أهلًا '+cur.split(' ')[0];
+  const p=pct(u); $('pctTxt').textContent=ar(p)+'٪'; setTimeout(()=>$('pctBar').style.width=p+'%',50);
+  $('m-vocab').textContent=ar(Object.keys(u.vocab).length)+' / '+ar(VOCAB.length);
+  $('m-fix').textContent=ar(Object.keys(u.fix).length)+' / '+ar(FIX.length);
+  $('m-pen').textContent=ar(Object.keys(u.pen).length)+' / '+ar(PEN.length);
+  $('m-badges').textContent=ar(BADGES.filter(b=>b.c(u)).length)+' / '+ar(BADGES.length)+' أوسمة';
+}
+
+/* ============ كنز المفردات ============ */
+function renderVocab(){
+  const u=me(), box=$('vocabBox'); const i=VOCAB.findIndex((_,k)=>!(k in u.vocab));
+  if(i<0){ const c=Object.values(u.vocab).filter(Boolean).length;
+    box.innerHTML=`<div class="done-box">${icon('diamond','lg')}<h3>أكملتِ كنز المفردات!</h3><p class="hint">إجاباتك الصحيحة: ${ar(c)} من ${ar(VOCAB.length)}</p><div class="row"><button class="btn" onclick="go('home')">العودة للتحديات</button></div></div>`; return; }
+  const q=VOCAB[i];
+  box.innerHTML=`<div class="qnum">السؤال ${ar(i+1)} من ${ar(VOCAB.length)}</div><div class="progress"><i style="width:${i/VOCAB.length*100}%"></i></div>
+  <div style="text-align:center"><span class="qtype">${q.t}</span></div><div class="word">${q.w}</div>
+  <div class="opts">${shuffle(q.o).map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join('')}</div>
+  <div class="feedback" id="vf"></div><div class="row" id="vn" style="display:none"><button class="btn" onclick="renderVocab()">التالي ←</button></div>`;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const right=b.dataset.o===q.o[0]; u.vocab[i]=right;
+    box.querySelectorAll('.opt').forEach(x=>{x.disabled=true; if(x.dataset.o===q.o[0])x.classList.add('ok');});
+    if(!right)b.classList.add('bad');
+    const f=$('vf'); f.className='feedback '+(right?'ok':'bad'); f.textContent=right?'أحسنتِ! +١٠ نقاط':'الإجابة الصحيحة: '+q.o[0];
+    right?addPts(10):save(); $('vn').style.display='flex';
+  });
+}
+
+/* ============ صححي العبارة ============ */
+let fixTries=0;
+function renderFix(){
+  const u=me(), box=$('fixBox'); const i=FIX.findIndex((_,k)=>!(k in u.fix)); fixTries=0;
+  if(i<0){ box.innerHTML=`<div class="done-box">${icon('magnifying-glass','lg')}<h3>عينك لا يفوتها خطأ!</h3><p class="hint">أكملتِ جميع العبارات</p><div class="row"><button class="btn" onclick="go('home')">العودة للتحديات</button></div></div>`; return; }
+  const q=FIX[i];
+  box.innerHTML=`<div class="qnum">العبارة ${ar(i+1)} من ${ar(FIX.length)}</div><div class="progress"><i style="width:${i/FIX.length*100}%"></i></div>
+  <div class="sentence">${q.s.map((w,k)=>`<button class="tok" data-k="${k}">${w}</button>`).join(' ')}</div>
+  <p class="hint" id="fh">اضغطي على الكلمة الخاطئة</p><div id="fo"></div>
+  <div class="feedback" id="ff"></div><div class="row" id="fn" style="display:none"><button class="btn" onclick="renderFix()">التالي ←</button></div>`;
+  box.querySelectorAll('.tok').forEach(t=>t.onclick=()=>{
+    if(+t.dataset.k!==q.e){ fixTries++; t.classList.add('shake'); setTimeout(()=>t.classList.remove('shake'),400); $('fh').textContent='ليست هذه، حاولي مرة أخرى'; return; }
+    box.querySelectorAll('.tok').forEach(x=>x.disabled=true); t.classList.add('found');
+    $('fh').textContent='أحسنتِ! والآن اختاري الصواب:';
+    $('fo').innerHTML=`<div class="opts" style="margin-top:12px">${shuffle(q.o).map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join('')}</div>`;
+    $('fo').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const right=b.dataset.o===q.o[0]; $('fo').querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.o===q.o[0])x.classList.add('ok');});
+      if(!right)b.classList.add('bad');
+      t.textContent=q.o[0]; t.classList.replace('found','fixed');
+      const p=right?(fixTries===0?15:10):0; u.fix[i]=p;
+      const f=$('ff'); f.className='feedback '+(right?'ok':'bad');
+      f.innerHTML=(right?`صحيح! +${ar(p)} نقطة`:'الصواب: '+q.o[0])+`<div style="font-weight:500;margin-top:4px"><i class="ph-duotone ph-lightbulb"></i> ${q.why}</div>`;
+      p?addPts(p):save(); $('fn').style.display='flex';
+    });
+  });
+}
+
+/* ============ تحدي القلم ============ */
+function renderPen(open){
+  const u=me(), box=$('penBox');
+  if(open===undefined){
+    box.innerHTML=`<div class="prompts">${PEN.map((p,k)=>`<button class="prompt" onclick="renderPen(${k})">${icon(p.em)}<div><h4>${p.title}</h4><p>${p.task}</p></div><span class="st ${u.pen[k]?'d':'n'}">${u.pen[k]?'<i class="ph-bold ph-check"></i> مكتملة':'ابدئي'}</span></button>`).join('')}</div>`; return; }
+  const p=PEN[open], prev=u.pen[open];
+  box.innerHTML=`<div class="card"><div style="text-align:center;margin-bottom:8px">${icon(p.em,'lg')}</div><h3 style="text-align:center;margin-bottom:4px">${p.title}</h3><p class="hint" style="margin-bottom:14px">${p.task}</p>
+  ${p.start?`<div class="starter">${p.start}</div>`:''}
+  <textarea class="write" id="pw" placeholder="اكتبي هنا…">${prev?prev.text:''}</textarea><div class="count" id="pc"></div>
+  <div class="row"><button class="btn ghost" onclick="renderPen()">رجوع</button><button class="btn alt" id="psave">${prev?'تحديث الكتابة':'إرسال'}</button></div></div>`;
+  const ta=$('pw'), cnt=()=>ta.value.trim().split(/\s+/).filter(Boolean).length;
+  const upd=()=>{$('pc').textContent='عدد الكلمات: '+ar(cnt()); $('psave').disabled=cnt()<6;}; ta.oninput=upd; upd();
+  $('psave').onclick=()=>{ const first=!u.pen[open]; u.pen[open]={text:ta.value.trim(),date:new Date().toISOString()};
+    if(first){addPts(15);toast('كتابة رائعة! +١٥ نقطة');}else{save();toast('تم تحديث كتابتك');} renderPen(); };
+}
+
+/* ============ الأوسمة ============ */
+function renderBadges(){
+  const u=me(); const got=BADGES.filter(b=>b.c(u)).length;
+  $('statsBox').innerHTML=`<div class="stat"><b>${ar(u.points)}</b><span>نقطة</span></div><div class="stat"><b>${ar(got)}</b><span>وسام</span></div><div class="stat"><b>${ar(pct(u))}٪</b><span>الإنجاز</span></div>`;
+  $('badgeBox').innerHTML=BADGES.map(b=>`<div class="badge ${b.c(u)?'got':''}">${icon(b.em,'gold')}<h4>${b.n}</h4><p>${b.d}</p></div>`).join('');
+}
+
+/* ============ المعلمة ============ */
+function openTeacher(){ const p=prompt('أدخلي رمز المعلمة'); if(p===null)return; if(p!==TEACHER_PIN){toast('الرمز غير صحيح');return;} go('teacher'); }
+function renderTeacher(){
+  const list=Object.entries(db.students).sort((a,b)=>b[1].points-a[1].points);
+  const avg=list.length?Math.round(list.reduce((s,[,u])=>s+pct(u),0)/list.length):0;
+  const writings=list.reduce((s,[,u])=>s+Object.keys(u.pen).length,0);
+  $('tStats').innerHTML=`<div class="stat"><b>${ar(list.length)}</b><span>طالبة مشاركة</span></div><div class="stat"><b>${ar(avg)}٪</b><span>متوسط الإنجاز</span></div><div class="stat"><b>${ar(writings)}</b><span>كتابة إبداعية</span></div>`;
+  if(!list.length){$('tTable').innerHTML='<p class="hint">لا توجد مشاركات بعد.</p>';return;}
+  $('tTable').innerHTML=`<table><thead><tr><th>#</th><th>الطالبة</th><th>النقاط</th><th>المفردات</th><th>العبارات</th><th>الإنجاز</th><th>الكتابات</th></tr></thead><tbody>${
+    list.map(([n,u],k)=>{const vc=Object.values(u.vocab).filter(Boolean).length, fc=Object.values(u.fix).filter(Boolean).length;
+      const ws=Object.entries(u.pen).map(([i,w])=>`<div class="wr"><small>${PEN[i]?PEN[i].title:''}</small>${esc(w.text)}</div>`).join('');
+      return `<tr><td>${ar(k+1)}</td><td><b>${esc(n)}</b></td><td>${ar(u.points)}</td><td>${ar(vc)}/${ar(Object.keys(u.vocab).length)}</td><td>${ar(fc)}/${ar(Object.keys(u.fix).length)}</td><td>${ar(pct(u))}٪</td><td>${ws?`<details><summary>عرض (${ar(Object.keys(u.pen).length)})</summary>${ws}</details>`:'—'}</td></tr>`;}).join('')
+  }</tbody></table>`;
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function exportCSV(){
+  const rows=[['الطالبة','النقاط','المفردات الصحيحة','العبارات الصحيحة','الكتابات','الإنجاز ٪']];
+  Object.entries(db.students).forEach(([n,u])=>rows.push([n,u.points,Object.values(u.vocab).filter(Boolean).length,Object.values(u.fix).filter(Boolean).length,Object.keys(u.pen).length,pct(u)]));
+  const blob=new Blob(['\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='نتائج-أثر-الكلمة.csv'; a.click();
+}
+function resetAll(){ if(!confirm('سيتم حذف جميع بيانات الطالبات على هذا الجهاز. متأكدة؟'))return; db={students:{}}; cur=null; save(); $('ptsBox').style.display='none'; renderTeacher(); toast('تم مسح البيانات'); }
+
+/* ============ بدء ============ */
+if(db.current && db.students[db.current]){ cur=db.current; $('ptsBox').style.display=''; updPts(); go('home'); }
+</script>
+</body>
+</html>
